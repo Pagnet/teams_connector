@@ -37,6 +37,16 @@ module TeamsConnector
       yield @content
     end
 
+    def self.mentions(&block)
+      TeamsConnector::Builder.new { |entry| entry.facts(&block) }
+    end
+
+    def mentions
+      @type = :mentions
+      @content = {}
+      yield @content
+    end
+
     def result
       case @type
       when :container
@@ -45,6 +55,8 @@ module TeamsConnector
         result_facts
       when :text
         result_text
+      when :mentions
+        result_mentions
       else
         raise TypeError, "The type #{@type} is not supported by the TeamsConnector::Builder"
       end
@@ -70,6 +82,24 @@ module TeamsConnector
       {
         type: 'TextBlock',
         text: @content
+      }
+    end
+
+    def result_mentions
+      {
+        msteams: {
+          entities: @content.map { |mention| mention_builder(mention) }
+        }
+      }
+    end
+
+    def mention_builder(mention)
+      {
+        type: 'mention',
+        text: "<at>#{mention[:name]}</at>",
+        mentioned: {
+          id: mention[:email]
+        }
       }
     end
   end

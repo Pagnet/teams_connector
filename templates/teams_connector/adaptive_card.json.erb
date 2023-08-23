@@ -13,19 +13,7 @@
           <%= @content[:card].map {|k| k.to_json}.join(", ") %>
         ]
         <% if @content[:mentions].present? %>
-          "msteams": {
-            "entities": [
-              <% @content[:mentions].map do |mention| %>
-                {
-                  "type": "mention",
-                  "text": <%= "<at>#{mention[:name]}</at>" %>,
-                  "mentioned": {
-                    "id": <%= mention[:email] %>
-                  }
-                },
-              <% end %>
-            ]
-          }
+          <%= @content[:mentions].to_json %>
         <% end %>
       }
     }
