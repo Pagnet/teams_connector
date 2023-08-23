@@ -37,14 +37,13 @@ module TeamsConnector
       yield @content
     end
 
-    def self.mentions(&block)
-      TeamsConnector::Builder.new { |entry| entry.mentions(&block) }
+    def self.mentions(params = [])
+      TeamsConnector::Builder.new { |entry| entry.mentions(params) }
     end
 
-    def mentions
+    def mentions(params)
       @type = :mentions
-      @content = {}
-      yield @content
+      @content = params
     end
 
     def result

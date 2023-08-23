@@ -41,6 +41,21 @@ RSpec.describe TeamsConnector::Builder do
     end
   end
 
+  describe 'mentions helper' do
+    subject { builder }
+
+    let(:builder) do
+      TeamsConnector::Builder.mentions { |mentions|
+        mentions[:name] = 'name'
+        mentions[:email] = 'name@email.com'
+      }
+    end
+
+    it 'creates a mention set with the specified entries' do
+      is_expected.to have_attributes type: :mentions, content: { email: 'name@email.com', name: 'name' }
+    end
+  end
+
   describe 'result' do
     subject do
       TeamsConnector::Builder.container do |items|
@@ -59,6 +74,44 @@ RSpec.describe TeamsConnector::Builder do
                                { title: 'First Fact', value: 'First Fact Text' }
                              ] }
                            ]
+    end
+
+    context 'with mentions' do
+      subject do
+        TeamsConnector::Builder.mentions(params).result
+      end
+
+      let(:params) do
+        [
+          { name: 'name', email: 'email@exemple.com' },
+          { name: 'name2', email: 'email2@exemple.com'}
+        ]
+      end
+
+      it 'gives the result as a hash translated to Adaptive Card syntax' do
+        is_expected.to match_array(
+          {
+            msteams: {
+              entities: [
+                {
+                  type: 'mention',
+                  text: '<at>name</at>',
+                  mentioned: {
+                    id: 'email@exemple.com'
+                  }
+                },
+                {
+                  type: 'mention',
+                  text: '<at>name2</at>',
+                  mentioned: {
+                    id: 'email2@exemple.com'
+                  }
+                }
+              ]
+            }
+          }
+        )
+      end
     end
 
     describe 'failure' do
