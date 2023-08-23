@@ -42,17 +42,17 @@ RSpec.describe TeamsConnector::Builder do
   end
 
   describe 'mentions helper' do
-    subject { builder }
+    subject { TeamsConnector::Builder.mentions(params) }
 
-    let(:builder) do
-      TeamsConnector::Builder.mentions { |mentions|
-        mentions[:name] = 'name'
-        mentions[:email] = 'name@email.com'
-      }
+    let(:params) do
+      [
+        { name: 'name', email: 'email@exemple.com' },
+        { name: 'name2', email: 'email2@exemple.com'}
+      ]
     end
 
     it 'creates a mention set with the specified entries' do
-      is_expected.to have_attributes type: :mentions, content: { email: 'name@email.com', name: 'name' }
+      is_expected.to have_attributes type: :mentions, content: params
     end
   end
 
@@ -84,7 +84,7 @@ RSpec.describe TeamsConnector::Builder do
       let(:params) do
         [
           { name: 'name', email: 'email@exemple.com' },
-          { name: 'name2', email: 'email2@exemple.com'}
+          { name: 'name2', email: 'email2@exemple.com' }
         ]
       end
 

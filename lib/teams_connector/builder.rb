@@ -48,14 +48,10 @@ module TeamsConnector
 
     def result
       case @type
-      when :container
-        result_container
-      when :facts
-        result_facts
-      when :text
-        result_text
-      when :mentions
-        result_mentions
+      when :container then result_container
+      when :facts then result_facts
+      when :text then result_text
+      when :mentions then result_mentions
       else
         raise TypeError, "The type #{@type} is not supported by the TeamsConnector::Builder"
       end
