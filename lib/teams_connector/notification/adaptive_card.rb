@@ -5,12 +5,13 @@ module TeamsConnector
     class AdaptiveCard < Notification
       attr_accessor :content
 
-      def initialize(template: :adaptive_card, content: {}, channel: TeamsConnector.configuration.default)
+      def initialize(template: :adaptive_card, content: {}, mentions: {}, channel: TeamsConnector.configuration.default)
         super(template: template, channels: channel)
         @content =
           if content.instance_of? TeamsConnector::Builder
             {
-              card: [content.result]
+              card: [content.result],
+              mentions: [mentions]
             }
           else
             content
