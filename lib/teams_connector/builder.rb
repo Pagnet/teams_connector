@@ -38,7 +38,7 @@ module TeamsConnector
     end
 
     def self.mentions(&block)
-      TeamsConnector::Builder.new { |entry| entry.facts(&block) }
+      TeamsConnector::Builder.new { |entry| entry.mentions(&block) }
     end
 
     def mentions
