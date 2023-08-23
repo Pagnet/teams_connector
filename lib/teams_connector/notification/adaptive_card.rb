@@ -11,7 +11,7 @@ module TeamsConnector
           if content.instance_of? TeamsConnector::Builder
             {
               card: [content.result],
-              mentions: mentions.present? ? [mentions.result] : mentions
+              mentions: mentions.present? ? mentions.result : mentions
             }
           else
             content
