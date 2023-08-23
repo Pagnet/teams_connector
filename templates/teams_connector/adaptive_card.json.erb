@@ -13,7 +13,7 @@
           <%= @content[:card].map {|k| k.to_json}.join(", ") %>
         ],
         <% if @content[:mentions].present? %>
-          <%= @content[:mentions].to_json %>
+          "msteams": <%= @content[:mentions].to_json %>
         <% end %>
       }
     }

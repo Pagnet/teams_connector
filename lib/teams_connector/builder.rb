@@ -81,11 +81,7 @@ module TeamsConnector
     end
 
     def result_mentions
-      {
-        msteams: {
-          entities: @content.map { |mention| mention_builder(mention) }
-        }
-      }
+      { entities: @content.map { |mention| mention_builder(mention) } }
     end
 
     def mention_builder(mention)
