@@ -89,7 +89,8 @@ module TeamsConnector
         type: 'mention',
         text: "<at>#{mention[:name]}</at>",
         mentioned: {
-          id: mention[:email]
+          id: mention[:id],
+          name: mention[:name]
         }
       }
     end
