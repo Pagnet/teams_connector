@@ -43,6 +43,7 @@ module TeamsConnector
     def deliver_channel(channel, content)
       url = TeamsConnector.configuration.channels[channel]
       raise ArgumentError, "The Teams channel '#{channel}' is not available in the configuration." if url.nil?
+      return unless TeamsConnector.configuratio.enabled_in_current_env?
 
       case TeamsConnector.configuration.method
       when :sidekiq then TeamsConnector::PostWorker.perform_async(url, content)

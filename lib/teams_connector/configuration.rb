@@ -4,7 +4,7 @@ module TeamsConnector
   class Configuration
     DEFAULT_TEMPLATE_DIR = %w[templates teams_connector].freeze
 
-    attr_reader :default, :method
+    attr_reader :default, :method, :enabled_environments
     attr_accessor :channels, :always_use_default, :template_dir, :color
 
     def initialize
@@ -14,6 +14,7 @@ module TeamsConnector
       @method = :direct
       @template_dir = DEFAULT_TEMPLATE_DIR
       @color = '3f95b5'
+      @enabled_environments = []
     end
 
     def default=(channel)
@@ -33,6 +34,10 @@ module TeamsConnector
       @channels[name] = url
     end
 
+    def enabled_environments=(enabled_environments)
+      @enabled_environments = enabled_environments
+    end
+
     def load_from_rails_credentials
       raise 'This method is only available in Ruby on Rails.' unless defined? Rails
 
@@ -40,6 +45,14 @@ module TeamsConnector
       webhook_urls.each do |entry|
         channel(entry[0], entry[1])
       end
+    end
+
+    def enabled_in_current_env?
+      enabled_environments.empty? || enabled_environments.include?(environment)
+    end
+
+    def environment
+      ENV['RAILS_ENV'] || 'development'
     end
   end
 end
