@@ -46,8 +46,8 @@ RSpec.describe TeamsConnector::Builder do
 
     let(:params) do
       [
-        { name: 'name', email: 'email@exemple.com' },
-        { name: 'name2', email: 'email2@exemple.com'}
+        { name: 'name', id: 'le-id-1' },
+        { name: 'name2', id: 'le-id-2' }
       ]
     end
 
@@ -83,32 +83,32 @@ RSpec.describe TeamsConnector::Builder do
 
       let(:params) do
         [
-          { name: 'name', email: 'email@exemple.com' },
-          { name: 'name2', email: 'email2@exemple.com' }
+          { name: 'name', id: 'le-id-1' },
+          { name: 'name2', id: 'le-id-2' }
         ]
       end
 
       it 'gives the result as a hash translated to Adaptive Card syntax' do
         is_expected.to match_array(
           {
-            msteams: {
-              entities: [
-                {
-                  type: 'mention',
-                  text: '<at>name</at>',
-                  mentioned: {
-                    id: 'email@exemple.com'
-                  }
-                },
-                {
-                  type: 'mention',
-                  text: '<at>name2</at>',
-                  mentioned: {
-                    id: 'email2@exemple.com'
-                  }
+            entities: [
+              {
+                type: 'mention',
+                text: '<at>name</at>',
+                mentioned: {
+                  id: 'le-id-1',
+                  name: 'name'
                 }
-              ]
-            }
+              },
+              {
+                type: 'mention',
+                text: '<at>name2</at>',
+                mentioned: {
+                  id: 'le-id-2',
+                  name: 'name2'
+                }
+              }
+            ]
           }
         )
       end
