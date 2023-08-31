@@ -30,6 +30,7 @@ RSpec.describe TeamsConnector::Configuration do
     is_expected.to have_attributes(method: :direct)
     is_expected.to have_attributes(template_dir: %w[templates teams_connector])
     is_expected.to have_attributes(color: '3f95b5')
+    is_expected.to have_attributes(enabled_environments: [])
   end
 
   it 'has a function to add a channel' do
@@ -95,6 +96,28 @@ RSpec.describe TeamsConnector::Configuration do
           { credentials_other: 'OTHER_TEST_URL' }
         ]
         expect(subject.channels).to include(*channels)
+      end
+    end
+  end
+
+  describe '#enabled_environments=' do
+    it 'sets the enabled environments' do
+      expect { subject.enabled_environments = %w[development test] }.to change { subject.enabled_environments }.from([]).to(%w[development test])
+    end
+  end
+
+  describe '#enabled_in_current_env?' do
+    it 'returns true if environments are configured' do
+      subject.enabled_environments = %w[development test]
+
+      expect(subject.enabled_in_current_env?).to be_truthy
+    end
+
+    context 'when no environments are configured' do
+      it 'returns false if no environments are configured' do
+        subject.enabled_environments = %w[not-found]
+
+        expect(subject.enabled_in_current_env?).to be_falsey
       end
     end
   end

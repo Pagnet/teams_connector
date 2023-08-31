@@ -11,7 +11,10 @@
         "version": "1.2",
         "body": [
           <%= @content[:card].map {|k| k.to_json}.join(", ") %>
-        ]
+        ],
+        <% if @content[:mentions].present? %>
+          "msteams": <%= @content[:mentions].to_json %>
+        <% end %>
       }
     }
   ]

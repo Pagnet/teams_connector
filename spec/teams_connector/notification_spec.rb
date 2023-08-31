@@ -38,6 +38,36 @@ RSpec.describe TeamsConnector::Notification do
     expect(WebMock).not_to have_requested :post, 'http://localhost'
   end
 
+  context 'when no enabled in current environment' do
+    before do
+      TeamsConnector.configure do |config|
+        config.enabled_environments = %w[not-found]
+      end
+    end
+
+    it 'does not deliver the message' do
+      subject.deliver_later
+
+      expect(WebMock).not_to have_requested :post, 'http://localhost'
+      expect(WebMock).not_to have_requested :post, 'http://default'
+    end
+  end
+
+  context 'when enabled in current environment' do
+    before do
+      TeamsConnector.configure do |config|
+        config.enabled_environments = %w[development test]
+      end
+    end
+
+    it 'does deliver the message' do
+      subject.deliver_later
+
+      expect(WebMock).to have_requested(:post, 'http://localhost').with headers: { "Content-Type": 'application/json' }
+      expect(WebMock).not_to have_requested :post, 'http://default'
+    end
+  end
+
   context 'multiple channels' do
     subject { TeamsConnector::Notification.new(template: :test_card, channels: %i[other another]) }
     it 'initializes with multiple channels' do
