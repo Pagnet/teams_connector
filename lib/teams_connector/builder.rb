@@ -76,7 +76,8 @@ module TeamsConnector
     def result_text
       {
         type: 'TextBlock',
-        text: @content
+        text: @content,
+        wrap: true
       }
     end
 
