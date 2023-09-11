@@ -69,7 +69,7 @@ RSpec.describe TeamsConnector::Builder do
     it 'gives the result as a hash translated to Adaptive Card syntax' do
       is_expected.to match type: 'Container',
                            items: [
-                             { type: 'TextBlock', text: 'Test Text' },
+                             { type: 'TextBlock', text: 'Test Text', wrap: true },
                              { type: 'FactSet', facts: [
                                { title: 'First Fact', value: 'First Fact Text' }
                              ] }
